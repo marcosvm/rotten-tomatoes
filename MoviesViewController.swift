@@ -17,10 +17,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
         // Do any additional setup after loading the view.
         moviesTableView.dataSource = self
         moviesTableView.delegate = self
-        
+
         var url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=xujwyn465fjkmptsyjz2s8d5")
         var request = NSURLRequest(URL: url!)
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler:  {
@@ -28,7 +29,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             var responseDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments, error: nil) as NSDictionary
             self.movies = responseDictionary["movies"] as [NSDictionary]
             self.moviesTableView.reloadData()
-            NSLog("Response: %@", responseDictionary)
+//            NSLog("Response: %@", responseDictionary)
         })
         
     }
@@ -51,20 +52,33 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         var movie = movies[indexPath.row] as NSDictionary
         cell.titleLabel.text = movie["title"] as? String
         cell.synopsisLabel.text = movie["synopsis"] as? String
+        
         var url = movie.valueForKeyPath("posters.thumbnail") as String
-        var nsrul = NSURL(string: url)
-        cell.posterView.setImageWithURL(NSURL(string: url))
+        var nsurl = NSURL(string: url)
+        var request = NSURLRequest(URL: nsurl!)
+        
+        cell.posterView.setImageWithURLRequest(request, placeholderImage: UIImage(named: "noimage"),
+            success: {
+                (request, response, image) -> Void in
+                    cell.posterView.image = image
+            }, failure: {
+                (resquest, response, error) -> Void in
+        })
+
         return cell
     }
 
-    /*
+    
     // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-    }
-    */
 
+        var indexPath = moviesTableView.indexPathForSelectedRow()!
+        var vc = segue.destinationViewController as MovieDetailViewController
+        vc.movie = movies[indexPath.row] as NSDictionary
+        moviesTableView.deselectRowAtIndexPath(indexPath, animated: true)
+
+    }
 }

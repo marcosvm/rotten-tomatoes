@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2ED146F3289ED1FEEFCF1001 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21A829D4A45216F263B711BB /* libPods.a */; };
+		A89B11081A82942900E9F581 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89B11071A82942900E9F581 /* MovieDetailViewController.swift */; };
+		A89B110A1A82BA4600E9F581 /* noimage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A89B11091A82BA4600E9F581 /* noimage.jpg */; };
+		A89B110C1A82CD5A00E9F581 /* MoviesNavigationControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89B110B1A82CD5A00E9F581 /* MoviesNavigationControllerViewController.swift */; };
 		A8A33DDC1A813D2A00737DA9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A33DDB1A813D2A00737DA9 /* AppDelegate.swift */; };
 		A8A33DE11A813D2A00737DA9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A8A33DDF1A813D2A00737DA9 /* Main.storyboard */; };
 		A8A33DE31A813D2A00737DA9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8A33DE21A813D2A00737DA9 /* Images.xcassets */; };
@@ -30,6 +33,9 @@
 /* Begin PBXFileReference section */
 		21A829D4A45216F263B711BB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A428ACDE76F11A7469649E0F /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		A89B11071A82942900E9F581 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
+		A89B11091A82BA4600E9F581 /* noimage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = noimage.jpg; sourceTree = "<group>"; };
+		A89B110B1A82CD5A00E9F581 /* MoviesNavigationControllerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesNavigationControllerViewController.swift; sourceTree = "<group>"; };
 		A8A33DD61A813D2A00737DA9 /* Rotten Tomatoes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rotten Tomatoes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8A33DDA1A813D2A00737DA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A8A33DDB1A813D2A00737DA9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -108,10 +114,13 @@
 				A8A33DFB1A813D5300737DA9 /* MoviesViewController.swift */,
 				A8A33DDB1A813D2A00737DA9 /* AppDelegate.swift */,
 				A8A33DDF1A813D2A00737DA9 /* Main.storyboard */,
+				A89B11071A82942900E9F581 /* MovieDetailViewController.swift */,
+				A89B11091A82BA4600E9F581 /* noimage.jpg */,
 				A8A33DE21A813D2A00737DA9 /* Images.xcassets */,
 				A8A33DE41A813D2A00737DA9 /* LaunchScreen.xib */,
 				A8A33DD91A813D2A00737DA9 /* Supporting Files */,
 				A8A33DFF1A81577900737DA9 /* MovieCell.swift */,
+				A89B110B1A82CD5A00E9F581 /* MoviesNavigationControllerViewController.swift */,
 			);
 			path = "Rotten Tomatoes";
 			sourceTree = "<group>";
@@ -225,6 +234,7 @@
 			files = (
 				A8A33DE11A813D2A00737DA9 /* Main.storyboard in Resources */,
 				A8A33DE61A813D2A00737DA9 /* LaunchScreen.xib in Resources */,
+				A89B110A1A82BA4600E9F581 /* noimage.jpg in Resources */,
 				A8A33DE31A813D2A00737DA9 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,6 +286,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A89B110C1A82CD5A00E9F581 /* MoviesNavigationControllerViewController.swift in Sources */,
+				A89B11081A82942900E9F581 /* MovieDetailViewController.swift in Sources */,
 				A8A33DDC1A813D2A00737DA9 /* AppDelegate.swift in Sources */,
 				A8A33DFC1A813D5300737DA9 /* MoviesViewController.swift in Sources */,
 				A8A33E001A81577900737DA9 /* MovieCell.swift in Sources */,
