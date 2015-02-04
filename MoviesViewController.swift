@@ -29,7 +29,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             self.movies = responseDictionary["movies"] as [NSDictionary]
             self.moviesTableView.reloadData()
             NSLog("Response: %@", responseDictionary)
-            
         })
         
     }
