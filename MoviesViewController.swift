@@ -13,6 +13,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var moviesTableView: UITableView!
     
     var movies: [NSDictionary]! = []
+    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,17 +22,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // Do any additional setup after loading the view.
         moviesTableView.dataSource = self
         moviesTableView.delegate = self
-
-        var url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=xujwyn465fjkmptsyjz2s8d5")
-        var request = NSURLRequest(URL: url!)
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler:  {
-            (response, data, error) -> Void in
-            var responseDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments, error: nil) as NSDictionary
-            self.movies = responseDictionary["movies"] as [NSDictionary]
-            self.moviesTableView.reloadData()
-//            NSLog("Response: %@", responseDictionary)
-        })
         
+        refreshControl = UIRefreshControl()
+        refreshControl.backgroundColor = UIColor.blackColor()
+        refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        
+        moviesTableView.insertSubview(refreshControl!, atIndex:0)
+
+        loadVideosFromAPI()
     }
 
     override func didReceiveMemoryWarning() {
@@ -80,5 +78,23 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         vc.movie = movies[indexPath.row] as NSDictionary
         moviesTableView.deselectRowAtIndexPath(indexPath, animated: true)
 
+    }
+    
+    // MARK: functions
+    func loadVideosFromAPI() -> Void {
+        var url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=xujwyn465fjkmptsyjz2s8d5")
+        var request = NSURLRequest(URL: url!)
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler:  {
+            (response, data, error) -> Void in
+            var responseDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments, error: nil) as NSDictionary
+            self.movies = responseDictionary["movies"] as [NSDictionary]
+            self.moviesTableView.reloadData()
+            //            NSLog("Response: %@", responseDictionary)
+        })
+    }
+    
+    func refresh() -> Void {
+        loadVideosFromAPI()
+        refreshControl.endRefreshing()
     }
 }
