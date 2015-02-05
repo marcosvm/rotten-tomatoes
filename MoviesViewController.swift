@@ -18,17 +18,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
         // Do any additional setup after loading the view.
         moviesTableView.dataSource = self
         moviesTableView.delegate = self
+        moviesTableView.backgroundColor = UIColor.blackColor()
         
-        refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = UIColor.blackColor()
-        refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
-        
-        moviesTableView.insertSubview(refreshControl!, atIndex:0)
-
+        addRefreshControl()
         loadVideosFromAPI()
     }
 
@@ -82,22 +77,50 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: functions
     func loadVideosFromAPI() -> Void {
-        var url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=xujwyn465fjkmptsyjz2s8d5")
-        var request = NSURLRequest(URL: url!)
+        let url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=xujwyn465fjkmptsyjz2s8d5")
+        let request = NSURLRequest(URL: url!)
         SVProgressHUD.setBackgroundColor(UIColor.grayColor())
         SVProgressHUD.showInfoWithStatus("Loading")
         
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler:  {
             (response, data, error) -> Void in
-            var responseDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments, error: nil) as NSDictionary
-            self.movies = responseDictionary["movies"] as [NSDictionary]
-            self.moviesTableView.reloadData()
-            SVProgressHUD.dismiss()
+            
+            if error != nil {
+                self.showNetworkErrorBanner()
+                NSURLCache.sharedURLCache().removeCachedResponseForRequest(request)                
+            } else {
+                let responseDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments, error: nil) as NSDictionary
+                self.movies = responseDictionary["movies"] as [NSDictionary]
+                self.moviesTableView.reloadData()
+                SVProgressHUD.dismiss()
+            }
         })
+    }
+
+    func addRefreshControl() -> Void {
+        refreshControl = UIRefreshControl()
+        refreshControl.backgroundColor = UIColor.blackColor()
+        refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        moviesTableView.insertSubview(refreshControl!, atIndex:0)
     }
     
     func refresh() -> Void {
         loadVideosFromAPI()
         refreshControl.endRefreshing()
+    }
+    
+    func showNetworkErrorBanner() -> Void {
+        let bannerView = UIView(frame:CGRect(x:0,y:0,width:320,height:50))
+        bannerView.backgroundColor = UIColor.grayColor()
+        
+        let label = UILabel(frame:CGRect(x:0,y:0,width:200,height:20))
+        label.center = CGPointMake(160, 25)
+        label.textAlignment = NSTextAlignment.Center
+        label.text = "Network error!"
+        label.textColor = UIColor.whiteColor()
+        label.font = UIFont.boldSystemFontOfSize(17)
+        bannerView.addSubview(label)
+        
+        moviesTableView.insertSubview(bannerView, atIndex: 0)
     }
 }
