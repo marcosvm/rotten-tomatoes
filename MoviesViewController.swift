@@ -84,12 +84,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func loadVideosFromAPI() -> Void {
         var url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=xujwyn465fjkmptsyjz2s8d5")
         var request = NSURLRequest(URL: url!)
+        SVProgressHUD.setBackgroundColor(UIColor.grayColor())
+        SVProgressHUD.showInfoWithStatus("Loading")
+        
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler:  {
             (response, data, error) -> Void in
             var responseDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments, error: nil) as NSDictionary
             self.movies = responseDictionary["movies"] as [NSDictionary]
             self.moviesTableView.reloadData()
-            //            NSLog("Response: %@", responseDictionary)
+            SVProgressHUD.dismiss()
         })
     }
     
