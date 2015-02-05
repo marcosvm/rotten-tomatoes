@@ -33,9 +33,9 @@ class MovieDetailViewController: UIViewController {
         synopsisTextView.textColor = UIColor.whiteColor()
         synopsisTextView.editable = false
                 
-        var posterURL = movie.valueForKeyPath("posters.original") as String
-        posterURL.stringByReplacingOccurrencesOfString("_tmb", withString: "_ori", options: .LiteralSearch, range: nil)
-        var url = NSURL(string: posterURL)
+        let posterURL = movie.valueForKeyPath("posters.original") as String
+        let highRes = posterURL.stringByReplacingOccurrencesOfString("_tmb", withString: "_ori", options: .LiteralSearch, range: nil)
+        let url = NSURL(string: highRes)
         movieView.setImageWithURL(url)
         
         
