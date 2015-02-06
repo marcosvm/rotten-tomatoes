@@ -8,13 +8,20 @@
 
 import UIKit
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITabBarDelegate {
     
     @IBOutlet weak var moviesTableView: UITableView!
+    @IBOutlet weak var tabBar: UITabBar!
+    @IBOutlet weak var moviesBarItem: UITabBarItem!
+    @IBOutlet weak var dvdsBarItem: UITabBarItem!
     
     var movies: [NSDictionary]! = []
     var refreshControl: UIRefreshControl!
+    let dvd_endpoint = "http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=xujwyn465fjkmptsyjz2s8d5"
+    let movies_endpoint = "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=xujwyn465fjkmptsyjz2s8d5"
+    var current_endpoint: String = ""
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,8 +30,16 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         moviesTableView.delegate = self
         moviesTableView.backgroundColor = UIColor.blackColor()
         
+        tabBar.delegate = self
+        tabBar.barTintColor = UIColor.blackColor()
+        tabBar.selectedImageTintColor = UIColor.whiteColor()
+
+        moviesBarItem.image = UIImage(named: "movies")
+        dvdsBarItem.image = UIImage(named: "dvds")
+        
         addRefreshControl()
-        loadVideosFromAPI()
+        current_endpoint = movies_endpoint
+        loadVideosFromAPI(current_endpoint)
     }
 
     override func didReceiveMemoryWarning() {
@@ -79,9 +94,19 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
     }
     
+    func tabBar(tabBar: UITabBar, didSelectItem item: UITabBarItem!) {
+        if item == moviesBarItem {
+            current_endpoint = movies_endpoint
+        } else {
+            current_endpoint = dvd_endpoint
+        }
+        self.title = item.title
+        loadVideosFromAPI(current_endpoint)
+    }
+    
     // MARK: functions
-    func loadVideosFromAPI() -> Void {
-        let url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=xujwyn465fjkmptsyjz2s8d5")
+    func loadVideosFromAPI(endpoint: String) -> Void {
+        let url = NSURL(string: endpoint)
         let request = NSURLRequest(URL: url!)
         SVProgressHUD.setBackgroundColor(UIColor.grayColor())
         SVProgressHUD.showInfoWithStatus("Loading")
@@ -109,7 +134,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func refresh() -> Void {
-        loadVideosFromAPI()
+        loadVideosFromAPI(current_endpoint)
         refreshControl.endRefreshing()
     }
     
