@@ -87,7 +87,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             
             if error != nil {
                 self.showNetworkErrorBanner()
-                NSURLCache.sharedURLCache().removeCachedResponseForRequest(request)                
+                NSURLCache.sharedURLCache().removeCachedResponseForRequest(request)
             } else {
                 let responseDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments, error: nil) as NSDictionary
                 self.movies = responseDictionary["movies"] as [NSDictionary]

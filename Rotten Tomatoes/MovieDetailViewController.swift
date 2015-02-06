@@ -34,10 +34,9 @@ class MovieDetailViewController: UIViewController {
         synopsisTextView.editable = false
                 
         let posterURL = movie.valueForKeyPath("posters.original") as String
-        let highRes = posterURL.stringByReplacingOccurrencesOfString("_tmb", withString: "_ori", options: .LiteralSearch, range: nil)
-        let url = NSURL(string: highRes)
-        movieView.setImageWithURL(url)
-        
+        let placeHolderImage = loadLowResImage(posterURL)
+        let highResURL = posterURL.stringByReplacingOccurrencesOfString("_tmb", withString: "_ori", options: .LiteralSearch, range: nil)
+        loadHighResImage(highResURL, placeHolderImage: placeHolderImage)
         
     }
 
@@ -46,8 +45,23 @@ class MovieDetailViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
+    func loadLowResImage(url: String) -> UIImage{
+        let lowResURL = NSURL(string: url)
+        let data = NSData(contentsOfURL: lowResURL!, options: nil, error: nil)
+        return UIImage(data: data!)!
+    }
+    
+    func loadHighResImage(url: String, placeHolderImage: UIImage) {
+        let url = NSURL(string: url)
+        let request = NSURLRequest(URL: url!)
+        
+        movieView.setImageWithURLRequest(request, placeholderImage: placeHolderImage, success: {
+            (request, response, image) -> Void in
+            self.movieView.image = image
+            }, failure: nil)
+    }
+    
+     /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
