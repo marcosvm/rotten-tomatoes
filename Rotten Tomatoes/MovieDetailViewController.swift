@@ -51,10 +51,10 @@ class MovieDetailViewController: UIViewController {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response, data, error) -> Void in
             let placeHolderImage = UIImage(data: data)!
 
-            self.fadein(self.movieView, image: placeHolderImage, duration: 1.5)
-
-            let highResURL = url.stringByReplacingOccurrencesOfString("_tmb", withString: "_ori", options: .LiteralSearch, range: nil)
-            self.loadHighResImage(highResURL, placeHolderImage: placeHolderImage)
+            self.movieView.fadein(1.5, success: { () -> Void in
+                let highResURL = url.stringByReplacingOccurrencesOfString("_tmb", withString: "_ori", options: .LiteralSearch, range: nil)
+                self.loadHighResImage(highResURL, placeHolderImage: placeHolderImage)
+                })
         }
     }
     
@@ -62,21 +62,13 @@ class MovieDetailViewController: UIViewController {
         let url = NSURL(string: url)
         let request = NSURLRequest(URL: url!)
         
-        movieView.setImageWithURLRequest(request, placeholderImage: placeHolderImage, success: {
-            (request, response, image) -> Void in
-
-            self.fadein(self.movieView, image: image, duration: 1.5)
-            
-            }, failure: nil)
-    }
-
-    func fadein(view: UIImageView, image: UIImage, duration: NSTimeInterval) -> Void {
-        view.alpha = 0.0
-        UIView.animateWithDuration(duration, animations: { () -> Void in
-            view.alpha = 1.0
+        self.movieView.fadein(1.5, success: { () -> Void in
+            self.movieView.setImageWithURLRequest(request, placeholderImage: placeHolderImage, success: {
+                (request, response, image) -> Void in
+                    self.movieView.image = image
+            }, failure :nil)
         })
-        view.image = image
-    }
+
     /*
     // MARK: - Navigation
 
@@ -87,4 +79,15 @@ class MovieDetailViewController: UIViewController {
     }
     */
 
+    }
+}
+
+extension UIImageView {
+    func fadein(duration: NSTimeInterval, success: () -> Void) {
+        self.alpha = 0.0
+        UIView.animateWithDuration(duration, animations: { () -> Void in
+            success()
+            self.alpha = 1.0
+        })
+    }
 }

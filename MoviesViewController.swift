@@ -54,12 +54,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             success: {
                 (request, response, image) -> Void in
 
-                    cell.posterView.alpha = 0.0
-                    UIView.animateWithDuration(1.5, animations: { () -> Void in
-                        cell.posterView.alpha = 1.0
+                cell.posterView.fadein(0.8, success: { () -> Void in
+                    cell.posterView.image = image
                     })
                 
-                    cell.posterView.image = image
             }, failure: {
                 (resquest, response, error) -> Void in
         })
