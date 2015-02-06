@@ -16,13 +16,13 @@ Time spent: `<Number of hours spent>`
 
 #### Optional
 
-[x] Add a tab bar for Box Office and DVD.
-[ ] Implement segmented control to switch between list view and grid view.
-[ ] Add a search bar.
-[x] All images fade in.
-[x] For the large poster, load the low-res image first, switch to high-res when complete.
-[ ] Customize the highlight and selection effect of the cell.
-[ ] Customize the navigation bar.
+- [x] Add a tab bar for Box Office and DVD.
+- [ ] Implement segmented control to switch between list view and grid view.
+- [ ] Add a search bar.
+- [x] All images fade in.
+- [x] For the large poster, load the low-res image first, switch to high-res when complete.
+- [ ] Customize the highlight and selection effect of the cell.
+- [ ] Customize the navigation bar.
 
 ### Walkthrough
 ![Video Walkthrough](rotten.gif)
