@@ -27,17 +27,16 @@ class MovieDetailViewController: UIViewController {
         synopsisTextView.textContainerInset = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
         scrollView.contentSize = CGSizeMake(self.view.frame.size.width, synopsisTextView.frame.origin.y+synopsisTextView.frame.size.height)
       
+        movieView.backgroundColor = UIColor.blackColor()
+        
         
         synopsisTextView.text = movie["synopsis"] as String
         synopsisTextView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
         synopsisTextView.textColor = UIColor.whiteColor()
         synopsisTextView.editable = false
-                
+
         let posterURL = movie.valueForKeyPath("posters.original") as String
-        let placeHolderImage = loadLowResImage(posterURL)
-        let highResURL = posterURL.stringByReplacingOccurrencesOfString("_tmb", withString: "_ori", options: .LiteralSearch, range: nil)
-        loadHighResImage(highResURL, placeHolderImage: placeHolderImage)
-        
+        loadImages(posterURL)
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,10 +44,18 @@ class MovieDetailViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func loadLowResImage(url: String) -> UIImage{
+    func loadImages(url: String) -> Void {
         let lowResURL = NSURL(string: url)
-        let data = NSData(contentsOfURL: lowResURL!, options: nil, error: nil)
-        return UIImage(data: data!)!
+        let request = NSURLRequest(URL: lowResURL!)
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response, data, error) -> Void in
+            let placeHolderImage = UIImage(data: data)!
+
+            self.fadein(self.movieView, image: placeHolderImage, duration: 1.5)
+
+            let highResURL = url.stringByReplacingOccurrencesOfString("_tmb", withString: "_ori", options: .LiteralSearch, range: nil)
+            self.loadHighResImage(highResURL, placeHolderImage: placeHolderImage)
+        }
     }
     
     func loadHighResImage(url: String, placeHolderImage: UIImage) {
@@ -57,11 +64,20 @@ class MovieDetailViewController: UIViewController {
         
         movieView.setImageWithURLRequest(request, placeholderImage: placeHolderImage, success: {
             (request, response, image) -> Void in
-            self.movieView.image = image
+
+            self.fadein(self.movieView, image: image, duration: 1.5)
+            
             }, failure: nil)
     }
-    
-     /*
+
+    func fadein(view: UIImageView, image: UIImage, duration: NSTimeInterval) -> Void {
+        view.alpha = 0.0
+        UIView.animateWithDuration(duration, animations: { () -> Void in
+            view.alpha = 1.0
+        })
+        view.image = image
+    }
+    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

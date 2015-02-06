@@ -53,6 +53,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.posterView.setImageWithURLRequest(request, placeholderImage: UIImage(named: "noimage"),
             success: {
                 (request, response, image) -> Void in
+
+                    cell.posterView.alpha = 0.0
+                    UIView.animateWithDuration(1.5, animations: { () -> Void in
+                        cell.posterView.alpha = 1.0
+                    })
+                
                     cell.posterView.image = image
             }, failure: {
                 (resquest, response, error) -> Void in
